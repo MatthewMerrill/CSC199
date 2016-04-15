@@ -1,5 +1,9 @@
-import java.util.*;
-import java.util.function.Consumer;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Created by merrillm on 4/1/16.
@@ -7,7 +11,7 @@ import java.util.function.Consumer;
 public class AutoHamil {
 
     public static final String EXISTS = "Exists";
-    public static final String DNE = "Does not exists";
+    public static final String DNE = "Does not exist";
 
     int[] z0;
     int[] z1;
@@ -24,19 +28,53 @@ public class AutoHamil {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         AutoHamil ah = new AutoHamil();
+        Scanner scn = new Scanner(new File("AutoHamilIn.in"));
+        
+        //*
+        int count = 0;
+        while (scn.hasNextLine()) {
+        	count++;
+        	
+        	String line = scn.nextLine();
+        	String caseStr = line.substring(line.indexOf('{') + 1, line.lastIndexOf('}'));
+        	String[] splt = caseStr.split("\\}, \\{");
+        	
+        	int[][] arr = new int[2][];
+        	
+        	for (int i = 0; i <= 1; i++) {
+        		String[] numStrs = splt[i].split(", ");
+        		arr[i] = new int[numStrs.length];
+        		for (int n = 0; n < numStrs.length; n++) {
+        			arr[i][n] = Integer.parseInt(numStrs[n]);
+        		}
+        	}
+        	
+        	String expected = line.substring(line.indexOf('"')+1, line.lastIndexOf('"'));
+        	long pre = System.currentTimeMillis();
+        	String emperical = ah.check(arr[0], arr[1]);
+        	long post = System.currentTimeMillis();
+        	
+        	long elapsed = post - pre;
+        	System.out.printf("%s\t%s%s%s\t%s\n", count,
+        			expected.equals(emperical) ? "   " : " # ",
+   					elapsed < 2000 ? "   " : " # ",
+   					emperical, elapsed);
+        	
+        }
+        /*/
         System.out.println(ah.check(
-                new int[]{1,2,3,4,3,1,6,7},
-                new int[]{6,2,2,5,4,7,2,7}
+                new int[]{0, 2, 3, 0},
+                new int[]{2, 3, 0, 3}
         ));
-
+        
         for (int m = 0; m < ah.z0.length; m++) {
             for (int n = 0; n < ah.z0.length; n++) {
                 System.out.print(ah.canReach[m][n] + " ");
             }
             System.out.println();
-        }
+        }//*/
     }
 
     public String check(int[] z0, int[] z1) {
@@ -53,23 +91,17 @@ public class AutoHamil {
             canReach[i] = new int[n];
             dfsA(i, i, 1);
         }
+        
         for (int i = 1; i < n; i++) {
             if (canReach[0][i] == 0)
                 return DNE;
         }
 
-        int cur = 0;
-        List<List<Integer>> lists = new ArrayList<>();
-        while (cur >= 0 && !needed.isEmpty()) {
-            List<Integer> list = lists.remove(0);
-            Consumer<List<Integer>> c = (l) -> {
-                s
-            };
-
-            c.accept(new ArrayList<Integer>(){{addAll(list);add(z0[cur]);}});
-            c.accept(new ArrayList<Integer>(){{addAll(list);add(z1[cur]);}});
-
-            break;
+        for (int i = 0; i < n; i++) {
+        	for (int j = i; j < n; j++) {
+        		if (canReach[i][j] + canReach[j][i] == 0)
+        			return DNE;
+        	}
         }
 
         return EXISTS;
@@ -95,7 +127,7 @@ public class AutoHamil {
 
     public int heur(List<Integer> list, Set<Integer> needed) {
         int h = list.size();
-        int f = list.get(list.size()-1)
+        int f = list.get(list.size()-1);
         for (int i : needed) {
             h += canReach[f][i];
         }
