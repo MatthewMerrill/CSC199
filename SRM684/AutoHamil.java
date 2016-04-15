@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -16,7 +15,6 @@ public class AutoHamil {
     int[] z0;
     int[] z1;
     int[][] canReach;
-    int leafCount;
 
     public void dfsA(int a, int b, int c) {
         if (canReach[a][b] > 0)
@@ -28,6 +26,36 @@ public class AutoHamil {
         }
     }
 
+    public String check(int[] z0, int[] z1) {
+        int n = z0.length;
+        this.z0 = z0;
+        this.z1 = z1;
+        canReach = new int[n][];
+
+        Set<Integer> needed = new HashSet<>();
+
+        for (int i = 0; i < n; i++) {
+            needed.add(i);
+            canReach[i] = new int[n];
+            dfsA(i, i, 1);
+        }
+        
+        for (int i = 1; i < n; i++) {
+            if (canReach[0][i] == 0)
+                return DNE;
+        }
+
+        for (int i = 0; i < n; i++) {
+        	for (int j = i; j < n; j++) {
+        		if (canReach[i][j] + canReach[j][i] == 0)
+        			return DNE;
+        	}
+        }
+
+        return EXISTS;
+    }
+    
+    
     public static void main(String[] args) throws FileNotFoundException {
         AutoHamil ah = new AutoHamil();
         Scanner scn = new Scanner(new File("AutoHamilIn.in"));
@@ -63,6 +91,8 @@ public class AutoHamil {
    					emperical, elapsed);
         	
         }
+        scn.close();
+        
         /*/
         System.out.println(ah.check(
                 new int[]{0, 2, 3, 0},
@@ -77,71 +107,4 @@ public class AutoHamil {
         }//*/
     }
 
-    public String check(int[] z0, int[] z1) {
-        int n = z0.length;
-        this.z0 = z0;
-        this.z1 = z1;
-        canReach = new int[n][];
-        leafCount = 0;
-
-        Set<Integer> needed = new HashSet<>();
-
-        for (int i = 0; i < n; i++) {
-            needed.add(i);
-            canReach[i] = new int[n];
-            dfsA(i, i, 1);
-        }
-        
-        for (int i = 1; i < n; i++) {
-            if (canReach[0][i] == 0)
-                return DNE;
-        }
-
-        for (int i = 0; i < n; i++) {
-        	for (int j = i; j < n; j++) {
-        		if (canReach[i][j] + canReach[j][i] == 0)
-        			return DNE;
-        	}
-        }
-
-        return EXISTS;
-    }
-
-    public int count() {
-		return 0;
-    }
-
-    public void bubble(List<List<Integer>> list, Set<Integer> needed) {
-        boolean flag = true;
-        for (int i = 0; flag || i < list.size(); i++) {
-            for (int j = i; j < list.size(); j++) {
-                flag = false;
-                if (heur(list.get(j + 1), needed) < heur(list.get(j), needed)) {
-                    list.add(j, list.remove(j + 1));
-                    flag = true;
-
-                }
-            }
-        }
-    }
-
-    public int heur(List<Integer> list, Set<Integer> needed) {
-        int h = list.size();
-        int f = list.get(list.size()-1);
-        for (int i : needed) {
-            h += canReach[f][i];
-        }
-        return h;
-    }
-
-    public boolean containsAll(int[] arr, Set<Integer> set) {
-        Set<Integer> tmp = new HashSet<>();
-        tmp.addAll(set);
-
-        for (int i : arr)
-            if (i > 0)
-                tmp.remove(i);
-
-        return tmp.isEmpty();
-    }
 }
