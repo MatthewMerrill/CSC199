@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class MountainClimbing {
+public class MountainClimbing_old {
 
 	private static final String NPU = "NO PATH UP";
 	public static void main(String[] args) throws FileNotFoundException {
@@ -46,14 +46,14 @@ public class MountainClimbing {
 		
 		while (!arrs.isEmpty()) {
 			arrs.sort((p0,p1) -> {return c[p1.x][p1.x] - c[p0.x][p0.y];});
-			Point p = arrs.remove(0);
+			Point pnt = arrs.remove(0);
 			for (int dx = -1; dx <= 1; dx++) {
 				for (int dy = -1; dy <= 1; dy++) {
-					int x = p.x + dx;
-					int y = p.y + dy;
-					if (Math.abs(dx + dy) != 1 || h[x][y] - h[p.x][p.y] > 100 || h[p.x][p.y] - h[x][y] > 50)
+					int x = pnt.x + dx;
+					int y = pnt.y + dy;
+					if (Math.abs(dx + dy) != 1 || h[x][y] - h[pnt.x][pnt.y] > 100 || h[pnt.x][pnt.y] - h[x][y] > 50)
 						continue;
-					c[x][y] = Math.min(c[x][y], c[p.x][p.y] + 1);
+					c[x][y] = Math.min(c[x][y], c[pnt.x][pnt.y] + 1);
 				}
 			}
 		}
