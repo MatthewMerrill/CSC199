@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Created by merrillm on 4/20/16.
@@ -27,11 +29,8 @@ public class MyProblem {
         System.out.println(obj.toString());
     }
 
-
     public static int gcd(int a, int b) {
-        if (b == 0)
-            return a;
-        return gcd(b, a%b);
+        return (b==0) ? a : gcd(b, a%b);
     }
     public static int lcm(int a, int b) {
         return a * (b / gcd(a,b));
@@ -40,32 +39,30 @@ public class MyProblem {
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
 
-        debug(gcd(24,6));
-        debug(gcd(14,21));
-        debug(gcd(24,6));
-        debug(gcd(22,145));
-
         caseLoop:
         for (int $ : xrange(scn.nextInt())) {
             // Number of Rows and Columns
             int R = scn.nextInt(), C = scn.nextInt();
-            // Spin Rates
+            // Initial Positions
             int[][] spin = new int[R][];
-            // First time can get the melon
-            int[][] time = new int[R][];
+            // Is it possible to reach this position
+            boolean[][] reached = new boolean[R][];
 
             // Initialize array
             for (int r : xrange(R)) {
                 spin[r] = IntStream.generate(scn::nextInt).limit(C).toArray();
-                time[r] = IntStream.generate((    ) -> -1).limit(C).toArray();
+                reached[r] = new boolean[C];
             }
-            debug("spin: " + Arrays.deepToString(spin));
+            debug("initial: " + Arrays.deepToString(spin));
+            debug("reached: " + Arrays.deepToString(reached));
 
-            time[0][0] = 0;
 
+           /* time[0][0] = 0;
+
+            // dr and dc for any given dir
             int[][] d_arr = new int[][]{
-                    new int[]{-1,0}, new int[]{0,1},
-                    new int[]{1,0}, new int[]{0,-1}
+                new int[]{-1,0}, new int[]{0,1},
+                new int[]{1,0}, new int[]{0,-1}
             };
 
             for (int rep : xrange(R*C)) {
@@ -93,12 +90,12 @@ public class MyProblem {
 
                             // Initial time I have melon
                             int t = time[r][c];
-                            int d0, d1;
+                            double d0, d1;
 
                             for (int i : xrange(5)) {
                                 // Direction faced at t0
-                                d0 = (spin[r][c] * t) % 4;
-                                d1 = (spin[r + dr][c + dc] * t) % 4;
+                                d0 = (t * 1.0 / spin[r     ][c     ]) % 4;
+                                d1 = (t * 1.0 / spin[r + dr][c + dc]) % 4;
 
                                 // If we don't meet, increment time by lesser of our rotation times.
                                 if (d0 == dir && d1 == (dir+2)%4)
@@ -122,7 +119,7 @@ public class MyProblem {
                     break;
             }
             debug(Arrays.deepToString(time));
-            System.out.println(time[R-1][C-1]);
+            System.out.println(time[R-1][C-1]);*/
         }
 
     }

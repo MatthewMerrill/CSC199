@@ -1,1 +1,6 @@
 /bin
+.gitignore
+/.idea
+.idea/
+.idea/*
+CSC199.iml

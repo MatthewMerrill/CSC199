@@ -1,0 +1,26 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\problemname{A--maze--ing!}
+
+We are going to generate a maze from a 5X5 grid of rooms. Every room has four walls except for walls we specify as missing. The top left and bottom right rooms have a missing wall as shown in the first diagram below. Additional walls will be specified as missing by giving you a pair of adjacent room numbers, indicating that the wall separating them is missing. The rooms are numbered as shown in the second diagram below. The third diagram below is the maze that results from the sample input given at the bottom of the page.
+
+{\small\begin{verbatim}
+|1|←|↑|↓||      | 1| 3| 0| 2| 0|     | |_  |_|_|
+|2|↑|↓|←|↓|     | 1| 0| 2| 3| 2|     | |_| |_ _|
+|→|→|→|↓|↑|     | 1| 1| 1| 2| 0|     |_ _  |_|_|
+|→|←|↑|↑|←|     | 1| 3| 0| 0| 3|     |_|_|_  |_|
+|←|→|↓|↓|↑|     | 1| 2| 2| 2| 0|     |_ _|_|_  |
+ \end{verbatim}}
+
+\section*{Input}
+
+Each line of input contains a pair of integers, indicating a pair of rooms whose shared wall is missing. A line with a pair of zeros indicates the end of the input.
+
+\section*{Output}
+
+Your program should output any sequence of rooms that leads from Room 1 to Room 25 without going through any existing wall or visiting any room more than once. Such a path is guaranteed to exist. Only horizontal and vertical movement is allowed.
+
+\includesample{sample}
+
+\end{document}
